@@ -1,0 +1,78 @@
+*[contenteditable] {
+    background: #F9F9F9;
+    font-size: 14px;
+    line-height: 26px;
+}
+.bodySpace {
+    padding: 0px;
+    height: 95%;
+    height: calc(100% - 42px);
+    overflow: auto;
+}
+.bodySpace>h5 {
+    color: #999;
+}
+.bodySpace>h5>#dcTitle {
+    color: #333;
+    font-size: 20px;
+}
+.sidebarSpace {
+    padding: 0px;
+    background: rgba(231, 231, 231, 0.28);
+    height: 95%;
+    height: calc(100% - 42px);
+    overflow: auto;
+}
+.list-group-item {
+    cursor: pointer;
+}
+.editorArea {
+    width: 100%;
+    border: 1px solid #EDEDED;
+    height: 80%;
+}
+.nav.nav-tabs>li.active>a {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.row-header {
+    color: #333;
+    background-color: #CDCDCD;
+}
+
+tbody tr th:not(.slno) {
+    font-size: 14px;
+    line-height: 32px !important;
+}
+
+/*Colors/Flags/etc*/
+.clr_red {
+    color:red !important;
+}
+
+/*Form Elements*/
+input[type=radio].form-control, input[type=checkbox].form-control {
+    width: auto;
+    outline: none !important;
+    box-shadow: none;
+    display: inline-block;
+    float: left;
+    margin: 0px;
+    margin-right: 10px;
+}
+label.form-checkbox {
+    line-height: 41px;
+    margin-right: 20px;
+}
+.table>tbody>tr>td.nopadding {
+    padding: 0px !important;
+}
+td.nopaddingBox input[type=checkbox] {
+    margin: -10px;
+    margin-left: 30%;
+}
+
+.codeReviewPanel .modal-body {
+    padding: 5px !important;
+}
