@@ -1,0 +1,115 @@
+<div id='formulaModal' class='modal fade' role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+        <h4 class='modal-title'>Formula Editor</h4>
+      </div>
+      <div class='modal-body'>
+        <form class='form-horizontal' onsubmit='updateFormula(this);return false;'>
+          
+        </form>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-danger pull-left' data-dismiss='modal'>Cancel</button>
+        <button type='button' class='btn btn-success' onclick='updateFormula(this)'>Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var formulaStr = "";
+function showFormulaEditor(formula, colEle, source) {
+    $("#formulaModal form").html("");
+    formulaStr = "";
+    
+    if(formula=="*") {
+        showCustomFormulaEditor();
+        return;
+    }
+    formulaStr = formula;
+    
+    regex = /@[a-zA-Z0-1-_:]+/gm;
+    formulaCols = formula.match(regex);
+    $.each(formulaCols, function(a,colName) {
+        $.each(formulaCols, function(a,colName) {
+            colName = colName.split(":");
+            if(colName[1]==null) colName[1] = "";
+            switch(colName[1]) {
+                case "columns":
+                    $("#formulaModal form").append("<div class='form-group'>"+
+                            "<label class='control-label col-sm-4'>Column : "+colName[0]+"</label>"+
+                            "<div class='col-sm-8'>"+
+                              "<select class='form-control table-columns' name='"+colName.join(":")+"'><option value=''>Loading ...</option></select>"+
+                            "</div>"+
+                          "</div>");
+                break;
+                default:
+                    $("#formulaModal form").append("<div class='form-group'>"+
+                            "<label class='control-label col-sm-4'>Column : "+colName[0]+"</label>"+
+                            "<div class='col-sm-8'>"+
+                              "<input type='text' class='form-control' name='"+colName.join(":")+"' placeholder='Table.Column'>"+
+                            "</div>"+
+                          "</div>");
+            }
+            
+            if($("#formulaModal form select.table-columns").length>0) {
+                $("#formulaModal form select.table-columns").load(_service("datacontrolsEditor", "listColumns", "select")+"&tbl="+$("input[name=srcreference]").val());
+            }
+        });
+    });
+            
+    $("#formulaModal").modal("show");
+}
+function showCustomFormulaEditor() {
+    lgksPrompt("Please type your formula here.","Custom Formula", function(ans) {
+        if(ans!=null && ans.length>0) {
+            ans = ans.replace(/\"/g,"'");
+            $("#editorTable tbody").append(gridFormula({
+                    "nx":$("#editorTable tbody").children().length+1,
+                    "colkey":md5(ans),
+                    "formula":ans,
+                    "label":"custom",
+                    "sortable":true,
+                    "searchable":true,
+                    "hidden":($("#editorTable tbody").children().length>8),
+                }));
+        }
+    });
+}
+function updateFormula(src) {
+    emptyFields = $("input","#formulaModal form").filter(function() {
+            if($(this).val().length<=0) return true;
+            else return false;
+        }).length;
+    
+    if(emptyFields>0) {
+        lgksToast("All the fields in formula editor needs to be filled");
+        return;
+    }
+    
+    qFormula = {};
+
+    $("input,select,textarea","#formulaModal form").each(function(a,b) {
+        if($(this).val().length>0) {
+            qFormula[$(this).attr("name")] = $(this).val();
+        }
+    });
+    
+    $.each(qFormula, function(col, val) {
+        formulaStr = formulaStr.replace(col, val);
+    });
+    
+    formulaStr = formulaStr.replace(/\"/g,"'");
+    $("#editorTable tbody").append(gridFormula({
+            "nx":$("#editorTable tbody").children().length+1,
+            "colkey":md5(formulaStr),
+            "formula":formulaStr,
+            "label":"custom",
+            "sortable":true,
+            "searchable":true,
+            "hidden":($("#editorTable tbody").children().length>8),
+        }));
+    $("#formulaModal").modal("hide");
+}
+</script>

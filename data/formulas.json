@@ -1,0 +1,352 @@
+[{
+	"formula": "*",
+	"name": "CUSTOM"
+}, {
+	"formula": "sum(@col1:columns)",
+	"name": "SUM",
+	"type": "MATH"
+}, {
+	"formula": "avg(@col1:columns)",
+	"name": "AVG",
+	"type": "MATH"
+}, {
+	"formula": "count(@col1:columns)",
+	"name": "COUNT",
+	"type": "MATH"
+}, {
+	"formula": "min(@col1:columns)",
+	"name": "MIN",
+	"type": "MATH"
+}, {
+	"formula": "max(@col1:columns)",
+	"name": "MAX",
+	"type": "MATH"
+}, {
+	"formula": "asc(@col1:columns)",
+	"name": "ASC",
+	"type": "MATH"
+}, {
+	"formula": "desc(@col1:columns)",
+	"name": "DESC",
+	"type": "MATH"
+}, {
+	"formula": "degrees(@col1:columns)",
+	"name": "DEGREES",
+	"type": "MATH"
+}, {
+	"formula": "div(@col1:columns)",
+	"name": "DIV",
+	"type": "MATH"
+}, {
+	"formula": "gretest(@col1:columns)",
+	"name": "GRETEST",
+	"type": "MATH"
+}, {
+	"formula": "least(@col1:columns)",
+	"name": "LEAST",
+	"type": "MATH"
+}, {
+	"formula": "round(@col1:columns)",
+	"name": "ROUND",
+	"type": "MATH"
+}, {
+	"formula": "sqrt(@col1:columns)",
+	"name": "SQRT",
+	"type": "MATH"
+}, {
+	"formula": "abs(@col1:columns)",
+	"name": "ABS",
+	"type": "MATH"
+}, {
+      "formula": "sin(@col1:columns)",
+      "name": "SIN",
+      "type":"MATH"
+}, {
+      "formula": "cos(@col1:columns)",
+      "name": "COS",
+      "type":"MATH"
+}, {
+      "formula": "tan(@col1:columns)",
+      "name": "TAN",
+      "type":"MATH"
+}, {
+	"formula": "acos(@col1:columns)",
+	"name": "ACOS",
+	"type": "MATH"
+}, {
+	"formula": "asin(@col1:columns)",
+	"name": "ASIN",
+	"type": "MATH"
+}, {
+	"formula": "atan(@col1:columns)",
+	"name": "ATAN",
+	"type": "MATH"
+}, {
+	"formula": "atan2(@col1:columns)",
+	"name": "ATAN2",
+	"type": "MATH"
+}, {
+	"formula": "ceil(@col1:columns)",
+	"name": "CEIL",
+	"type": "MATH"
+}, {
+	"formula": "cos(@col1:columns)",
+	"name": "COS",
+	"type": "MATH"
+}, {
+	"formula": "cot(@col1:columns)",
+	"name": "COT",
+	"type": "MATH"
+}, {
+	"formula": "exp(@col1:columns)",
+	"name": "EXP",
+	"type": "MATH"
+}, {
+	"formula": "floor(@col1:columns)",
+	"name": "FLOOR",
+	"type": "MATH"
+}, {
+	"formula": "log10(@col1:columns)",
+	"name": "LOG10",
+	"type": "MATH"
+}, {
+	"formula": "log2(@col1:columns)",
+	"name": "LOG2",
+	"type": "MATH"
+}, {
+	"formula": "truncate(@col1:columns)",
+	"name": "TRUNCATE",
+	"type": "MATH"
+}, {
+	"formula": "log(@col1:columns)",
+	"name": "LOG",
+	"type": "MATH"
+}, {
+	"formula": "bit_count(@col1:columns)",
+	"name": "BIT_COUNT",
+	"type": "MATH"
+}, {
+	"formula": "bit_or(@col1:columns)",
+	"name": "BIT_OR",
+	"type": "MATH"
+}, {
+	"formula": "interval(@col1:columns)",
+	"name": "INTERVAL",
+	"type": "MATH"
+}, {
+	"formula": "power(@col1:columns)",
+	"name": "POWER",
+	"type": "MATH"
+}, {
+	"formula": "radians(@col1:columns)",
+	"name": "RADIANS",
+	"type": "MATH"
+}, {
+	"formula": "std(@col1:columns)",
+	"name": "STD",
+	"type": "MATH"
+}, {
+	"formula": "stddev(@col1:columns)",
+	"name": "STDDEV",
+	"type": "MATH"
+}, {
+	"formula": "atav2(@col1:columns)",
+	"name": "ATAN2",
+	"type": "MATH"
+}, {
+	"formula": "pi(@col1:columns)",
+	"name": "PI",
+	"type": "MATH"
+}, {
+	"formula": "ln(@col1:columns)",
+	"name": "LN",
+	"type": "MATH"
+}, {
+	"formula": "crc32(@col1:columns)",
+	"name": "CRC32",
+	"type": "MATH"
+}, {
+	"formula": "conv(@col1:columns)",
+	"name": "CONV",
+	"type": "MATH"
+}, {
+	"formula": "ucase(@col1:columns)",
+	"name": "UCASE",
+	"type": "STRING"
+}, {
+	"formula": "lcase(@col1:columns)",
+	"name": "LCASE",
+	"type": "STRING"
+}, {
+	"formula": "ucase(@col1:columns)",
+	"name": "UCASE",
+	"type": "STRING"
+}, {
+	"formula": "concat(@col1:columns)",
+	"name": "CONCAT",
+	"type": "STRING"
+}, {
+	"formula": "trim(@col1:columns)",
+	"name": "TRIM",
+	"type": "STRING"
+}, {
+	"formula": "ltrim(@col1:columns)",
+	"name": "LTRIM",
+	"type": "STRING"
+}, {
+	"formula": "rtrim(@col1:columns)",
+	"name": "RTRIM",
+	"type": "STRING"
+}, {
+	"formula": "length(@col1:columns)",
+	"name": "LENGTH",
+	"type": "STRING"
+}, {
+	"formula": "locate(@col1:columns)",
+	"name": "LOCATE",
+	"type": "STRING"
+}, {
+	"formula": "mid(@col1:columns)",
+	"name": "MID",
+	"type": "STRING"
+}, {
+	"formula": "repeat(@col1:columns)",
+	"name": "REPEAT",
+	"type": "STRING"
+}, {
+	"formula": "replace(@col1:columns)",
+	"name": "REPLACE",
+	"type": "STRING"
+}, {
+	"formula": "reverse(@col1:columns)",
+	"name": "REVERSE",
+	"type": "STRING"
+}, {
+	"formula": "right(@col1:columns)",
+	"name": "RIGHT",
+	"type": "STRING"
+}, {
+	"formula": "left(@col1:columns)",
+	"name": "LEFT",
+	"type": "STRING"
+}, {
+	"formula": "space(@col1:columns)",
+	"name": "SPACE",
+	"type": "STRING"
+}, {
+	"formula": "strcmp(@col1:columns)",
+	"name": "STRCMP",
+	"type": "STRING"
+}, {
+	"formula": "char_length(@col1:columns)",
+	"name": "CHAR_LENGTH",
+	"type": "STRING"
+}, {
+	"formula": "concat_ws(@col1:columns)",
+	"name": "CONCAT_WS",
+	"type": "STRING"
+}, {
+	"formula": "find_in_set(@col1:columns)",
+	"name": "FIND_IN_SET",
+	"type": "STRING"
+}, {
+	"formula": "format(@col1:columns)",
+	"name": "FORMAT",
+	"type": "STRING"
+}, {
+	"formula": "bin(@col1:columns)",
+	"name": "BIN",
+	"type": "STRING"
+}, {
+	"formula": "strcmp(@col1:columns)",
+	"name": "STRCMP",
+	"type": "STRING"
+}, {
+	"formula": "bit_length(@col1:columns)",
+	"name": "BIT_LENGTH",
+	"type": "STRING"
+}, {
+	"formula": "elt(@col1:columns)",
+	"name": "ELT",
+	"type": "STRING"
+}, {
+	"formula": "hex(@col1:columns)",
+	"name": "HEX",
+	"type": "STRING"
+}, {
+	"formula": "insert(@col1:columns)",
+	"name": "INSERT",
+	"type": "STRING"
+}, {
+	"formula": "instr(@col1:columns)",
+	"name": "INSTR",
+	"type": "STRING"
+}, {
+	"formula": "load_file(@col1:columns)",
+	"name": "LOAD_FILE",
+	"type": "STRING"
+}, {
+	"formula": "lpad(@col1:columns)",
+	"name": "LPAD",
+	"type": "STRING"
+}, {
+	"formula": "make_set(@col1:columns)",
+	"name": "MAKE_SET",
+	"type": "STRING"
+}, {
+	"formula": "oct(@col1:columns)",
+	"name": "OCT",
+	"type": "STRING"
+}, {
+	"formula": "octet_length(@col1:columns)",
+	"name": "OCTET_LENGTH",
+	"type": "STRING"
+}, {
+	"formula": "ord(@col1:columns)",
+	"name": "ORD",
+	"type": "STRING"
+}, {
+	"formula": "position(@col1:columns)",
+	"name": "POSITION",
+	"type": "STRING"
+}, {
+	"formula": "quote(@col1:columns)",
+	"name": "QUOTE",
+	"type": "STRING"
+}, {
+	"formula": "regexp(@col1:columns)",
+	"name": "REGEXP",
+	"type": "STRING"
+}, {
+	"formula": "rpad(@col1:columns)",
+	"name": "RPAD",
+	"type": "STRING"
+}, {
+	"formula": "soundex(@col1:columns)",
+	"name": "SOUNDEX",
+	"type": "STRING"
+}, {
+	"formula": "substring_index(@col1:columns)",
+	"name": "SUBSTRING_INDEX",
+	"type": "STRING"
+}, {
+	"formula": "unhex(@col1:columns)",
+	"name": "UNHEX",
+	"type": "STRING"
+}, {
+	"formula": "ascii(@col1:columns)",
+	"name": "ASCII",
+	"type": "STRING"
+}, {
+	"formula": "export_set(@col1:columns)",
+	"name": "EXPORT_SET",
+	"type": "STRING"
+}, {
+	"formula": "from_base64(@col1:columns)",
+	"name": "FROM_BASE64",
+	"type": "STRING"
+}, {
+	"formula": "like(@col1:columns)",
+	"name": "LIKE",
+	"type": "STRING"
+}]

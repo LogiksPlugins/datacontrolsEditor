@@ -23,19 +23,33 @@ function pageContentArea() {
     <div class='col-xs-12 col-sm-9 col-md-9 col-lg-10 bodySpace'>
         <h5>&nbsp;&nbsp;Report Editor : <span id='dcTitle'></span> <div id='dcTags' class='pull-right' style='margin-right:10px;'></div></h5>
         <ul class='nav nav-tabs nav-justified'>
-            <li class='active'><a href='#editorTable' data-toggle='tab' role='tab' aria-controls='nav-editorTable' aria-selected='true'>Grid Table</a></li>
+            <li class='active'><a href='#editorTable' data-toggle='tab' role='tab' aria-controls='nav-editorTable' aria-selected='true'>Grid</a></li>
             <li><a href='#editorSource' data-toggle='tab' role='tab' aria-controls='nav-editorSource' aria-selected='false'>Source</a></li>
             <li><a href='#editorSidebar' data-toggle='tab' role='tab' aria-controls='nav-editorSidebar' aria-selected='false'>Sidebar</a></li>
-            <li><a href='#editorTopChart' data-toggle='tab' role='tab' aria-controls='nav-editorTopChart' aria-selected='false'>Top Chart</a></li>
+            <li><a href='#editorTopChart' data-toggle='tab' role='tab' aria-controls='nav-editorTopChart' aria-selected='false'>TopChart</a></li>
             <li><a href='#editorRules' data-toggle='tab' role='tab' aria-controls='nav-editorRules' aria-selected='false'>Rules</a></li>
             <li><a href='#editorHooks' data-toggle='tab' role='tab' aria-controls='nav-editorHooks' aria-selected='false'>Hooks</a></li>
             <li><a href='#editorActions' data-toggle='tab' role='tab' aria-controls='nav-editorActions' aria-selected='false'>Actions</a></li>
-            <li><a href='#editorScript' data-toggle='tab' role='tab' aria-controls='nav-editorScript' aria-selected='false'>Script</a></li>
-            <li><a href='#editorStyles' data-toggle='tab' role='tab' aria-controls='nav-editorStyles' aria-selected='false'>Styles</a></li>
             <li><a href='#editorProperties' data-toggle='tab' role='tab' aria-controls='nav-editorProperties' aria-selected='false'>Properties</a></li>
+            
+            <li class='dropdown'>
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#' style='white-space: nowrap;'>Templates <span class='caret'></span></a>
+                <ul class='dropdown-menu'>
+                    <li><a href='#editorKanban' data-toggle='tab' role='tab' aria-controls='nav-editorKanban' aria-selected='false'>Kanban</a></li>
+                    <li><a href='#editorCards' data-toggle='tab' role='tab' aria-controls='nav-editorCards' aria-selected='false'>Cards</a></li>
+                    <li><a href='#editorCalendar' data-toggle='tab' role='tab' aria-controls='nav-editorCalendar' aria-selected='false'>Calendar</a></li>
+                </ul>
+            </li>
+            <li class='dropdown'>
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#' style='white-space: nowrap;'>More <span class='caret'></span></a>
+                <ul class='dropdown-menu'>
+                    <li><a href='#editorScript' data-toggle='tab' role='tab' aria-controls='nav-editorScript' aria-selected='false'>Script</a></li>
+                    <li><a href='#editorStyles' data-toggle='tab' role='tab' aria-controls='nav-editorStyles' aria-selected='false'>Styles</a></li>
+                </ul>
+            </li>
         </ul>
         <div class='tab-content'>
-            <div id='editorTable' class='table-responsive tab-pane fade in active'>
+            <div id='editorTable' class='tableColumReceiver table-responsive tab-pane fade in active'>
                 <table class='table table-responsive table-hover'>
                 <thead>
                     <tr>
@@ -91,7 +105,10 @@ function pageContentArea() {
                         <th>Column 1</th>
                         <th width='100px'>Relation</th>
                         <th>Column 2</th>
-                        <th>--</th>
+                        <th>
+                            <i class='fa fa-list fa-2x pull-right' onclick='addQueryWhere_RAW(this)' title='Add RAW Query Condition'></i>
+                            <i class='fa fa-columns fa-2x pull-right' onclick='addQueryWhere_LOGIC(this)' title='Add Logical Query Condition'></i>
+                        </th>
                     </tr>
                 </thead><tbody></tbody></table>
             </div>
@@ -118,7 +135,7 @@ function pageContentArea() {
                             <tr><th class='row-header' colspan=100>Source</th></tr>
                             <tr>
                                 <th width=50%>Source Table</th>
-                                <td><input name='sidebar_table' value='' class='form-control' type='text' /></td>
+                                <td><select name='sidebar_table' class='form-control tableDropdown'></select></td>
                             </tr>
                             <tr>
                                 <th width=50%>Source Columns</th>
@@ -138,7 +155,10 @@ function pageContentArea() {
                                 <th>Column 1</th>
                                 <th width='100px'>Relation</th>
                                 <th>Column 2</th>
-                                <th>--</th>
+                                <th>
+                                    <i class='fa fa-list fa-2x pull-right' onclick='addQueryWhere_RAW(this)' title='Add RAW Query Condition'></i>
+                                    <i class='fa fa-columns fa-2x pull-right' onclick='addQueryWhere_LOGIC(this)' title='Add Logical Query Condition'></i>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id='sidebarSourceWhere'>
@@ -172,7 +192,7 @@ function pageContentArea() {
                             <tr><th class='row-header' colspan=100>Source</th></tr>
                             <tr>
                                 <th width=50%>Source Table</th>
-                                <td><input name='chart_table' value='' class='form-control' type='text' /></td>
+                                <td><select name='chart_table' class='form-control tableDropdown'></select></td>
                             </tr>
                             <tr>
                                 <th width=50%>Source Columns</th>
@@ -192,7 +212,10 @@ function pageContentArea() {
                                 <th>Column 1</th>
                                 <th width='100px'>Relation</th>
                                 <th>Column 2</th>
-                                <th>--</th>
+                                <th>
+                                    <i class='fa fa-list fa-2x pull-right' onclick='addQueryWhere_RAW(this)' title='Add RAW Query Condition'></i>
+                                    <i class='fa fa-columns fa-2x pull-right' onclick='addQueryWhere_LOGIC(this)' title='Add Logical Query Condition'></i>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id='chartSourceWhere'>
@@ -209,7 +232,9 @@ function pageContentArea() {
                         <th>Rule Column</th>
                         <th>Value</th>
                         <th>Class</th>
-                        <th>--</th>
+                        <th>
+                            <i class='fa fa-plus fa-2x pull-right' onclick='addBlankRule(this)' title='Add Blank Rule'></i>
+                        </th>
                     </tr>
                 </thead><tbody></tbody></table>
             </div>
@@ -221,7 +246,9 @@ function pageContentArea() {
                         <th>Hook State/Type</th>
                         <th>Call Type</th>
                         <th>Methods, etc</th>
-                        <th>--</th>
+                        <th>
+                            <i class='fa fa-plus fa-2x pull-right' onclick='addBlankHook(this)' title='Add Blank Hook'></i>
+                        </th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -229,20 +256,24 @@ function pageContentArea() {
             </div>
             <div id='editorActions' class='table-responsive tab-pane fade'>
                 <table class='table table-responsive table-hover'>
-                <thead>
-                    <tr>
-                        <th width='100px'>SL#</th>
-                        <th>Action</th>
-                        <th>Label</th>
-                        <th>Icon</th>
-                        <th>Class</th>
-                        <th>--</th>
-                    </tr>
-                </thead>
-                <thead><tr><th class='row-header' colspan=100>Header Actions</th></tr></thead>
-                <tbody id='dcActions'></tbody>
-                <thead><tr><th class='row-header' colspan=100>Row Buttons</th></tr></thead>
-                <tbody id='dcButtons'></tbody>
+                    <thead>
+                        <tr>
+                            <th width='100px'>SL#</th>
+                            <th>Action</th>
+                            <th>Label</th>
+                            <th>Icon</th>
+                            <th>Class</th>
+                            <th>--</th>
+                        </tr>
+                    </thead>
+                    <thead><tr><th class='row-header' colspan=100>Header Actions
+                        <i class='fa fa-plus fa-2x pull-right' onclick='addBlankAction(this)' title='Add New Action'></i>
+                    </th></tr></thead>
+                    <tbody id='dcActions'></tbody>
+                    <thead><tr><th class='row-header' colspan=100>Row Buttons
+                        <i class='fa fa-plus fa-2x pull-right' onclick='addBlankButton(this)' title='Add Row Button'></i>
+                    </th></tr></thead>
+                    <tbody id='dcButtons'></tbody>
                 </table>
             </div>
             <div id='editorScript' class='table-responsive tab-pane fade'>
@@ -255,9 +286,28 @@ function pageContentArea() {
                 <table class='table table-responsive'>
                 <tbody></tbody></table>
             </div>
+            
+            <div id='editorKanban' class='table-responsive tab-pane fade'>
+                <h1 align=center class='alert alert-danger'>WIP Kanban</h1>
+                <table class='table table-responsive table-hover'>
+                    
+                </table>
+            </div>
+            <div id='editorCards' class='table-responsive tab-pane fade'>
+                <h1 align=center class='alert alert-danger'>WIP Cards</h1>
+                <table class='table table-responsive table-hover'>
+                    
+                </table>
+            </div>
+            <div id='editorCalendar' class='table-responsive tab-pane fade'>
+                <h1 align=center class='alert alert-danger'>WIP Calendar</h1>
+                <table class='table table-responsive table-hover'>
+                    
+                </table>
+            </div>
         </div>
     </div>
-    <div class='col-xs-12 col-sm-3 col-md-3 col-lg-2 sidebarSpace'>
+    <div class='col-xs-12 col-sm-3 col-md-3 col-lg-2 sidebarSpace noselect'>
         <ul class='nav nav-tabs nav-justified'>
             <li class='active'><a href='#dbTables' data-toggle='tab' role='tab' aria-controls='nav-dbTables' aria-selected='true'>Tables</a></li>
             <li><a href='#dbFormulas' data-toggle='tab' role='tab' aria-controls='nav-dbFormulas' aria-selected='false'>Formulas</a></li>
@@ -274,8 +324,9 @@ function pageContentArea() {
     	        </div>
             </div>
         </div>
-    </div>
-    ";
+    </div>"
+    .file_get_contents(dirname(__DIR__)."/comps/report_filter.html")
+    .file_get_contents(dirname(__DIR__)."/comps/report_formula.html");
 }
 
 $toolBar = [
@@ -317,8 +368,8 @@ const dcHash = "<?=$dcHash?>";
 const dcMode = "<?=$slugs['dcmode']?>";
 const dbLogicSelector = "<?=$dbLogicSelector?>";
 
-var ruleRow = "<tr><th class='slno'>{{nx}}</th><td data-name='rule_type'>{{rule_type}}</td><td data-name='rule_column' contenteditable=true>{{rule_column}}</td><td data-name='rule_value' contenteditable=true>{{rule_value}}</td><td data-name='rule_class' contenteditable=true>{{rule_class}}</td><td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td></tr>";
-var gridRow = "<tr data-field='{{field}}'><th class='slno'>{{nx}}</th>"+
+var ruleRow = "<tr><th class='slno'>{{nx}}</th><td data-name='rule_type'>{{{formfield 'report_rule_types' rule_type}}}</td><td data-name='rule_column' contenteditable=true>{{rule_column}}</td><td data-name='rule_value' contenteditable=true>{{rule_value}}</td><td data-name='rule_class' contenteditable=true>{{rule_class}}</td><td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td></tr>";
+var gridRow = "<tr data-field='{{field}}' class='trfield'><th class='slno'>{{nx}}</th>"+
     "<td data-name='table'>{{table}}</td>"+
     "<td data-name='column'>{{column}}</td>"+
     "<td data-name='label' contenteditable=true>{{label}}</td>"+
@@ -329,10 +380,20 @@ var gridRow = "<tr data-field='{{field}}'><th class='slno'>{{nx}}</th>"+
     "<td data-name='formatter' class='nopadding'>{{{formfield 'formatter' formatter}}}</td>"+
     "<td data-name='filter' class='text-center'><i class='fa fa-tags actionIcon' data-cmd='editReportFilter' title='Edit Filter for this field' ></i></td>"+
     "<td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td></tr>";
-//<td data-name='calltype' contenteditable=true>{{calltype}}</td><td data-name='methods' contenteditable=true>{{methods}}</td><td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td>
+var gridFormula = "<tr data-colkey='{{colkey}}' class='trformula'><th class='slno'>{{nx}}</th>"+
+    "<td data-name='formula' contenteditable=true colspan=2>{{formula}}</td>"+
+    "<td data-name='label' contenteditable=true>{{label}}</td>"+
+    "<td data-name='hidden' class='nopaddingBox'>{{{formfield 'hidden' hidden}}}</td>"+
+    "<td data-name='searchable' class='nopaddingBox'>{{{formfield 'searchable' searchable}}}</td>"+
+    "<td data-name='sortable' class='nopaddingBox'>{{{formfield 'sortable' sortable}}}</td>"+
+    "<td data-name='classes' contenteditable=true>{{classes}}</td>"+
+    "<td data-name='formatter' class='nopadding'>{{{formfield 'formatter' formatter}}}</td>"+
+    "<td data-name='filter' class='text-center'><i class='fa fa-tags actionIcon' data-cmd='editReportFilter' title='Edit Filter for this field' ></i></td>"+
+    "<td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td></tr>";
 $(function() {
     gridRow = Handlebars.compile(gridRow);
     ruleRow = Handlebars.compile(ruleRow);
+    gridFormula = Handlebars.compile(gridFormula);
     
     w = $(".sidebarSpace").width();
     if(w==null || w<200) w = 200;
@@ -362,6 +423,22 @@ $(function() {
         showHidePanels();
     });
     
+    $( ".tableColumReceiver" ).droppable({
+          accept: "li.list-group-item.list-table-columns, li.list-group-item.list-formula",
+          classes: {
+            //"ui-droppable-active": "ui-state-active",
+            //"ui-droppable-hover": "ui-state-hover"
+          },
+          drop: function( event, ui ) {
+                src = $(ui.draggable[0]);
+                if(src.hasClass("list-table-columns")) {
+                    addBlankRow(ui.draggable[0], this);
+                } else if(src.hasClass("list-formula")) {
+                    addBlankFormula(ui.draggable[0], this);
+                }
+          }
+        });
+    
     loadDBFormulas();
 });
 
@@ -388,6 +465,7 @@ function updateDCPanelUI() {
         if(b.filter!=null) {
             if($("#editorTable tbody tr[data-field='"+a+"']").length>0) {
                 $("#editorTable tbody tr[data-field='"+a+"'] td[data-name='filter']").data("filter",b.filter);
+                $("#editorTable tbody tr[data-field='"+a+"'] td[data-name='filter'] .actionIcon").addClass("clr_RED");
             }
         }
     });
@@ -404,19 +482,10 @@ function updateDCPanelUI() {
                 $("#editorSource input[name=srcreference]").attr("readonly","true");
                 
                 $.each(dcConfig.source.where, function(a, b) {
-                        nx = $("#editorSource .sqlWhere tbody").children().length+1;
-                        relation = "eq";
                         if(b=="RAW") {
-                            $("#editorSource .sqlWhere tbody").append("<tr class='rawwhere'><th class='slno'>"+nx+"</th><td colspan=100 contenteditable=true>"+a+"</td></tr>");
+                            addQueryWhere_RAW("#editorSource .sqlWhere tbody",a);
                         } else {
-                            $("#editorSource .sqlWhere tbody").append("<tr><th class='slno'>"+nx+"</th>"+
-                                "<td class='col1' contenteditable=true>"+a+"</td>"+
-                                "<td><select class='form-control' data-value='"+relation+"'>"+
-                                    dbLogicSelector+
-                                "</select></td>"+
-                                "<td class='col2' contenteditable=true>"+b+"</td>"+
-                                "<td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td>"+
-                                "</tr>");
+                            addQueryWhere_LOGIC("#editorSource .sqlWhere tbody",a,b);
                         }
                     });
                 break;
@@ -460,7 +529,8 @@ function updateDCPanelUI() {
             $("select[name=sidebarcolumn]").data("value", colField);
             //$("select[name=sidebarcolumn]").val();
             
-            $("input[name=sidebar_table]").val(dcConfig.sidebar.source[colField].table);
+            $("select[name=sidebar_table]").val(dcConfig.sidebar.source[colField].table);
+            $("select[name=sidebar_table]").data("value",dcConfig.sidebar.source[colField].table);
             $("input[name=sidebar_groupby]").val(dcConfig.sidebar.source[colField].groupby);
             $("input[name=sidebar_cols]").val(dcConfig.sidebar.source[colField].cols);
             
@@ -473,19 +543,10 @@ function updateDCPanelUI() {
             
             if(dcConfig.sidebar.source[colField].where!=null) {
                 $.each(dcConfig.sidebar.source[colField].where, function(a,b) {
-                    nx = $("#sidebarSourceWhere").children().length+1;
-                    relation = "eq";
                     if(b=="RAW") {
-                        $("#sidebarSourceWhere").append("<tr class='rawwhere'><th class='slno' width=100px>"+nx+"</th><td colspan=100 contenteditable=true>"+a+"</td></tr>");
+                        addQueryWhere_RAW("#sidebarSourceWhere",a);
                     } else {
-                        $("#sidebarSourceWhere").append("<tr><th class='slno' width=100px>"+nx+"</th>"+
-                            "<td class='col1' contenteditable=true>"+a+"</td>"+
-                            "<td><select class='form-control' data-value='"+relation+"'>"+
-                                dbLogicSelector+
-                            "</select></td>"+
-                            "<td class='col2' contenteditable=true>"+b+"</td>"+
-                            "<td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td>"+
-                            "</tr>");
+                        addQueryWhere_LOGIC("#sidebarSourceWhere",a,b);
                     }
                 });
             }
@@ -502,37 +563,57 @@ function updateDCPanelUI() {
             //$("select[name=sidebarcolumn]").data("value", colField);
             //$("select[name=sidebarcolumn]").val();
             
-            $("input[name=chart_table]").val(dcConfig.charts.source[colField].table);
+            $("select[name=chart_table]").val(dcConfig.charts.source[colField].table);
+            $("select[name=chart_table]").data("value",dcConfig.charts.source[colField].table);
             $("input[name=chart_groupby]").val(dcConfig.charts.source[colField].groupby);
             $("input[name=chart_cols]").val(dcConfig.charts.source[colField].cols);
             
             if(dcConfig.charts.source[colField].where!=null) {
                 $.each(dcConfig.charts.source[colField].where, function(a,b) {
-                    nx = $("#chartSourceWhere").children().length+1;
-                    relation = "eq";
                     if(b=="RAW") {
-                        $("#chartSourceWhere").append("<tr class='rawwhere'><th class='slno' width=100px>"+nx+"</th><td colspan=100 contenteditable=true>"+a+"</td></tr>");
+                        addQueryWhere_RAW("#chartSourceWhere",a);
                     } else {
-                        $("#chartSourceWhere").append("<tr><th class='slno' width=100px>"+nx+"</th>"+
-                            "<td class='col1' contenteditable=true>"+a+"</td>"+
-                            "<td><select class='form-control' data-value='"+relation+"'>"+
-                                dbLogicSelector+
-                            "</select></td>"+
-                            "<td class='col2' contenteditable=true>"+b+"</td>"+
-                            "<td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td>"+
-                            "</tr>");
+                        addQueryWhere_LOGIC("#chartSourceWhere",a,b);
                     }
                 });
             }
         }
     }
     
-    
-    
+    updateDCPanelTemplateUI();
     showHidePanels();
 }
-function editReportFilter() {
-    
+
+function updateDCPanelTemplateUI() {
+    //Template Views
+    // reportTemplates = {
+    //     "kanban":{
+    //         "title":"Kanban View"
+    //     },
+    //     "cards":{
+    //         "title":"Cards/Mobility List View"
+    //     },
+    //     "calendar":{
+    //         "title":"Calendar View"
+    //     },
+    // };
+    // $("#editorViews>table").html("");
+    // $.each(reportTemplates, function(key, template) {
+    //     if(template.title==null) template.title = toTitle(key)+ " View";
+    //     $("#editorViews>table").append("<thead data-refid='template_"+key+"'><tr><th class='row-header' colspan=100>"+template.title+"</th></tr></thead><tbody data-template='"+key+"' data-refid='template_"+key+"'></tbody>");
+        
+    //     if(dcConfig[key]!=null) {
+    //         tempTemplate = $.extend(template, dcConfig[key]);
+    //     } else {
+    //         tempTemplate = template;
+    //     }
+        
+    //     $("#editorViews>table tbody[data-refid='template_"+key+"']").append(propRow({"name":key+"_enabled","title":"Enabled","value":false,"class":"enabled"}));
+    //     $.each(tempTemplate, function(a,b) {
+    //         if(a=="title") return;
+    //         $("#editorViews>table tbody[data-refid='template_"+key+"']").append(propRow({"name":a,"title":toHumanCase(a),"value":b}));
+    //     });
+    // });
 }
 
 function showHidePanels() {
@@ -554,26 +635,57 @@ function showHidePanels() {
 }
 
 function collectDCMoreData(qData) {
+    //Validate the Entire DataControl
+    if($("table.sqlWhere tbody>tr").length < $("input[name=srcreference]").val().split(",").length-1) {
+        lgksAlert("No of where clause does not match minimum requirement for "+$("input[name=srcreference]").val().split(",").length+" Tables");
+        return false;
+    }
+    
+    //If DataControl is valid, pass the collected data into the system
     xData = {};
     $("#editorTable tbody tr").each(function() {
-        field = $(this).data("field");
-        dataObj = {
-                "label":$(this).find("td[data-name=label]").text(),
-                "hidden":$(this).find("td[data-name=hidden] input").is(":checked"),
-                "searchable":$(this).find("td[data-name=searchable] input").is(":checked"),
-                "sortable":$(this).find("td[data-name=sortable] input").is(":checked"),
-                //"groupable":$(this).find("td[data-name=groupable] input").is(":checked"),
-                "classes":$(this).find("td[data-name=classes]").text(),
-            };
-        if($(this).find("td[data-name=formatter] select").val()!=null && $(this).find("td[data-name=formatter] select").val().length>0) {
-            dataObj['formatter'] = $(this).find("td[data-name=formatter] select").val();
+        if($(this).hasClass("trfield")) {
+            field = $(this).data("field");
+            dataObj = {
+                    "label":$(this).find("td[data-name=label]").text(),
+                    "hidden":$(this).find("td[data-name=hidden] input").is(":checked"),
+                    "searchable":$(this).find("td[data-name=searchable] input").is(":checked"),
+                    "sortable":$(this).find("td[data-name=sortable] input").is(":checked"),
+                    //"groupable":$(this).find("td[data-name=groupable] input").is(":checked"),
+                    "classes":$(this).find("td[data-name=classes]").text(),
+                };
+            if($(this).find("td[data-name=formatter] select").val()!=null && $(this).find("td[data-name=formatter] select").val().length>0) {
+                dataObj['formatter'] = $(this).find("td[data-name=formatter] select").val();
+            }
+            filterConfig = $(this).find("td[data-name=filter]").data("filter");
+            if(filterConfig!=null) {
+                dataObj['filter'] = filterConfig;
+            }
+            
+            xData[field] = dataObj;
+        } else if($(this).hasClass("trformula")) {
+            field = $(this).find("td[data-name=formula]").text();
+            if(field!=null && field.length>0) {
+                dataObj = {
+                        "label":$(this).find("td[data-name=label]").text(),
+                        //"alias":
+                        "hidden":$(this).find("td[data-name=hidden] input").is(":checked"),
+                        "searchable":$(this).find("td[data-name=searchable] input").is(":checked"),
+                        "sortable":$(this).find("td[data-name=sortable] input").is(":checked"),
+                        //"groupable":$(this).find("td[data-name=groupable] input").is(":checked"),
+                        "classes":$(this).find("td[data-name=classes]").text(),
+                    };
+                if($(this).find("td[data-name=formatter] select").val()!=null && $(this).find("td[data-name=formatter] select").val().length>0) {
+                    dataObj['formatter'] = $(this).find("td[data-name=formatter] select").val();
+                }
+                filterConfig = $(this).find("td[data-name=filter]").data("filter");
+                if(filterConfig!=null) {
+                    dataObj['filter'] = filterConfig;
+                }
+                
+                xData[field] = dataObj;
+            }
         }
-        filterConfig = $(this).find("td[data-name=filter]").data("filter");
-        if(filterConfig!=null) {
-            dataObj['filter'] = filterConfig;
-        }
-        
-        xData[field] = dataObj;
         //console.log(field,this, dataObj);
     });
     
@@ -581,10 +693,19 @@ function collectDCMoreData(qData) {
         case "sql":
             sqlWhere = {};
             $("#editorSource .sqlWhere tbody tr").each(function() {
+                $(this).removeClass("alert-danger").removeClass("alert");
                 if($(this).hasClass("rawwhere")) {
-                    sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                    if($(this).find("td[contenteditable]").text().length>0) {
+                        sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                    } else {
+                        $(this).addClass("alert alert-danger");
+                    }
                 } else {
-                    sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                    if($(this).find("td.col1").text().length>0 && $(this).find("td.col2").text().length>0) {
+                        sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                    } else {
+                        $(this).addClass("alert alert-danger");
+                    }
                 }
             });
             
@@ -624,13 +745,14 @@ function collectDCMoreData(qData) {
     if($("#editorRules tbody tr").length>0) {
         qData['rules'] = {};
         $("#editorRules tbody tr").each(function() {
-            if(qData['rules'][$(this).find("td[data-name=rule_type]").text()]==null) {
-                qData['rules'][$(this).find("td[data-name=rule_type]").text()] = {};
+            rule_type = $(this).find("td[data-name=rule_type] select").val();
+            if(qData['rules'][rule_type]==null) {
+                qData['rules'][rule_type] = {};
             }
-            if(qData['rules'][$(this).find("td[data-name=rule_type]").text()][$(this).find("td[data-name=rule_column]").text()]==null) {
-                qData['rules'][$(this).find("td[data-name=rule_type]").text()][$(this).find("td[data-name=rule_column]").text()] = {};
+            if(qData['rules'][rule_type][$(this).find("td[data-name=rule_column]").text()]==null) {
+                qData['rules'][rule_type][$(this).find("td[data-name=rule_column]").text()] = {};
             }
-            qData['rules'][$(this).find("td[data-name=rule_type]").text()][$(this).find("td[data-name=rule_column]").text()][$(this).find("td[data-name=rule_value]").text()] = $(this).find("td[data-name=rule_class]").text();
+            qData['rules'][rule_type][$(this).find("td[data-name=rule_column]").text()][$(this).find("td[data-name=rule_value]").text()] = $(this).find("td[data-name=rule_class]").text();
         });
     }
     
@@ -642,20 +764,30 @@ function collectDCMoreData(qData) {
         
         sqlWhere = {};
         $("#sidebarSourceWhere tr").each(function() {
+            $(this).removeClass("alert-danger").removeClass("alert");
             if($(this).hasClass("rawwhere")) {
-                sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                if($(this).find("td[contenteditable]").text().length>0) {
+                    sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                } else {
+                    $(this).addClass("alert alert-danger");
+                }
             } else {
-                sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                if($(this).find("td.col1").text().length>0 && $(this).find("td.col2").text().length>0) {
+                    sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                } else {
+                    $(this).addClass("alert alert-danger");
+                }
             }
         });
         
         qData['sidebar']['source'][$("#sidebarPanel *[name='sidebarcolumn']").val()] = {
                 "type":"sql",
-                "table":$("#sidebarPanel input[name='sidebar_table']").val(),
+                "table":$("#sidebarPanel select[name='sidebar_table']").val(),
                 "groupby":$("#sidebarPanel input[name='sidebar_groupby']").val(),
                 "cols":$("#sidebarPanel input[name='sidebar_cols']").val(),
                 "where":sqlWhere
             };
+        //$("#sidebarPanel select[name='sidebar_table']").data("value", $("#sidebarPanel select[name='sidebar_table']").val());
     }
     
     if($("#topchartPanel select[name='charttype']").val().length>0) {
@@ -666,38 +798,41 @@ function collectDCMoreData(qData) {
         };
         sqlWhere = {};
         $("#chartSourceWhere tr").each(function() {
+            $(this).removeClass("alert-danger").removeClass("alert");
             if($(this).hasClass("rawwhere")) {
-                sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                if($(this).find("td[contenteditable]").text().length>0) {
+                    sqlWhere[$(this).find("td[contenteditable]").text()] = "RAW";
+                } else {
+                    $(this).addClass("alert alert-danger");
+                }
             } else {
-                sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                if($(this).find("td.col1").text().length>0 && $(this).find("td.col2").text().length>0) {
+                    sqlWhere[$(this).find("td.col1").text()] = {"VALUE":$(this).find("td.col2").text(),"OP":$(this).find("select").val()};
+                } else {
+                    $(this).addClass("alert alert-danger");
+                }
             }
         });
         
         qData['charts']['source'].push({
                 "type":"sql",
                 "fill":$("input[name=chart_filling]").is(":checked")?true:false,
-                "table":$("#topchartPanel input[name='chart_table']").val(),
+                "table":$("#topchartPanel select[name='chart_table']").val(),
                 "groupby":$("#topchartPanel input[name='chart_groupby']").val(),
                 "cols":$("#topchartPanel input[name='chart_cols']").val(),
                 "where":sqlWhere
             });
+        //$("#topchartPanel select[name='chart_table']").data("value", $("#topchartPanel select[name='chart_table']").val());
     }
     
+    //Templates
+    // $("#editorKanban>table tbody").each(function() {
+    //     if($(this).find("td.enabled input:checked").length>0 && $(this).find("td.enabled input:checked").val()=="true") {
+    //         //console.log("HELLO WORLD");
+    //     }
+    // });
     
     return qData;
-}
-
-function editReportFilter(src) {
-    filterConfig = $(src).closest("td").data("filter");
-    if(filterConfig==null) {
-        filterConfig = {
-            "type":"select",
-	        "nofilter":"--",
-	        "options":{}
-        };
-    }
-
-    console.log(filterConfig);
 }
 
 function updateGridColumnSelectors() {
@@ -711,5 +846,108 @@ function updateGridColumnSelectors() {
     $("select.grid_fields").each(function() {
         $(this).val($(this).data("value"));
     });
+}
+
+function updateUIImpact() {
+    if($("input[name=srcreference]").length>0) {
+        tblList = [];
+        $("#editorTable tr td[data-name=table]").each(function() {
+            table = $(this).text().trim();
+            if(tblList.indexOf(table)<0) {
+                tblList.push(table);
+            }
+        });
+        
+        // tblList = $("input[name=srcreference]").val();
+        // if(tblList==null || tblList.length<=0) tblList = [];
+        // else tblList = tblList.split(",");
+
+        // if(tblList.indexOf(table)<0) {
+        //     tblList.push(table);
+        // }
+
+        $("input[name=srcreference]").val(tblList.join(","));
+    }
+}
+
+function addBlankFormula(colEle, source) {
+    if(colEle!=null) {
+        formula = $(colEle).data('formula');
+        showFormulaEditor(formula, colEle, source);
+    }
+}
+
+function addBlankRow(colEle, source) {
+    if(colEle!=null) {
+        colkey = $(colEle).data("colkey");
+        table = $(colEle).data("table");
+        column = $(colEle).data("column");
+        type = $(colEle).data("type");
+        defaultValue = $(colEle).data("default");
+        
+        if($("#editorTable tbody").find("tr[data-field='"+colkey+"']").length>0) {
+            lgksAlert("Table Column Is already available in field list");
+            $("#editorTable tbody").find("tr[data-field='"+colkey+"']").addClass("alert alert-danger");
+            setTimeout(function() {
+                $("#editorTable tbody tr.alert").removeClass("alert-danger").removeClass("alert");
+            }, 5000);
+            return;
+        }
+
+        if(type=="enum('false','true')" || type=="enum('true','false')") {
+            $("#editorTable tbody").append(gridRow({
+                "nx":$("#editorTable tbody").children().length+1,
+                "field":colkey,
+                "table":table,
+                "column":column,
+                "label":toTitle(column),
+                "formatter":"checkbox",
+                "sortable":true,
+                "searchable":true,
+                "hidden":($("#editorTable tbody").children().length>8),
+            }));
+        } else if(type.substr(0,4)=="enum") {
+            $("#editorTable tbody").append(gridRow({
+                "nx":$("#editorTable tbody").children().length+1,
+                "field":colkey,
+                "table":table,
+                "column":column,
+                "label":toTitle(column),
+                "sortable":true,
+                "searchable":true,
+                "hidden":($("#editorTable tbody").children().length>8),
+            }));
+        } else {
+            $("#editorTable tbody").append(gridRow({
+                "nx":$("#editorTable tbody").children().length+1,
+                "field":colkey,
+                "table":table,
+                "column":column,
+                "label":toTitle(column),
+                "sortable":true,
+                "searchable":true,
+                "hidden":($("#editorTable tbody").children().length>8),
+            }));
+        }
+        
+        if($("#editorTable tbody tr:last-child td[data-name=formatter] select").length>0) {
+            $("#editorTable tbody tr:last-child td[data-name=formatter] select").each(function() {
+                $(this).val($(this).data("value"));
+            });
+        }
+
+        updateUIImpact();
+        //console.log(colEle, source, table);
+    }
+}
+
+function addBlankRule(src) {
+    $("#editorRules tbody").append(ruleRow({
+            "nx":$("#editorRules tbody").children().length+1,
+            "rule_type":"",
+            "rule_column":"",
+            "rule_value":"",
+            "rule_class":"",
+        }));
 }
 </script>

@@ -31,9 +31,9 @@ function pageContentArea() {
             <li><a href='#editorProperties' data-toggle='tab' role='tab' aria-controls='nav-editorProperties' aria-selected='false'>Properties</a></li>
         </ul>
         <div class='tab-content'>
-            <div id='editorForm' class='table-responsive tab-pane fade in active'>
+            <div id='editorForm' class='tableColumReceiver table-responsive tab-pane fade in active'>
                 <div id='formDesigner' class='formDesigner'>
-                    <h3 align=center>Loading Form Preview ...</h3>
+                    
                 </div>
             </div>
             <div id='editorForceFill' class='table-responsive tab-pane fade'>
@@ -125,6 +125,23 @@ printPageComponent(false,[
 .form-actions {
     display:none;
 }
+.field-tools {
+    /*margin-bottom: -20px;*/
+    position: absolute;
+    right: 20px;
+    display: none;
+}
+.field-container:hover .field-tools {
+    display: inline-block;
+}
+.field-container:hover .field-tools .fa {
+    margin: 3px;
+    cursor: pointer;
+}
+.ui-state-highlight {
+    background: red;
+    min-height: 80px;
+}
 </style>
 <script>
 const dcHash = "<?=$dcHash?>";
@@ -133,7 +150,7 @@ const dcMode = "<?=$slugs['dcmode']?>";
 var forceFillRow = "<tr><th class='slno'>{{nx}}</th><td data-name='data_column' contenteditable=true>{{data_column}}</td><td data-name='data_value' contenteditable=true>{{data_value}}</td><td class='action'><i class='removeMe fa fa-times pull-right clr_red'></i></td></tr>";
 
 var formFields = {};
-
+var formKeys = [];
 $(function() {
     forceFillRow = Handlebars.compile(forceFillRow);
     
@@ -152,6 +169,25 @@ $(function() {
     });
     
     loadFormElements();
+    
+    $(".tableColumReceiver").droppable({
+          accept: "li.list-group-item.list-table-columns, li.list-group-item.list-formula",
+          classes: {
+            //"ui-droppable-active": "ui-state-active",
+            //"ui-droppable-hover": "ui-state-hover"
+          },
+          drop: function( event, ui ) {
+                src = $(ui.draggable[0]);
+                if(src.hasClass("list-table-columns")) {
+                    addColumnField(ui.draggable[0], this);
+                } else if(src.hasClass("list-form-item")) {
+                    addFormElement(ui.draggable[0], this);
+                }
+          }
+        });
+    $("#formDesigner").delegate("*[data-cmd]","click", function() {
+        doFormFieldAction(this);
+    });
     
 });
 function refreshUI() {
@@ -179,8 +215,11 @@ function updateDCPanelUI() {
     }
     
     formFields = dcConfig.fields;
+    updateFormFieldModel();
+    
     renderFormPreview();
 }
+
 function collectDCMoreData(qData) {
     if($("#editorForceFill tbody").children().length>0) {
         qData['forcefill'] = {};
@@ -197,7 +236,14 @@ function collectDCMoreData(qData) {
             "where": ["md5(id)"]
         };
     
-    qData['fields'] = formFields;
+    qData['fields'] = {};
+    //updateFormFieldModel();
+    $.each(formKeys, function(field) {
+        if(formFields['field']!=null) {
+            qData['fields'][field] = formFields['field'];
+        }
+    });
+    
     
     return qData;
 }
@@ -205,14 +251,18 @@ function collectDCMoreData(qData) {
 function renderFormPreview() {
     if(dcConfig.fields==null) dcConfig.fields = {};
     
-    $("#formDesigner").html("<div class='ajaxloading ajaxloading5'></div>");
+    $("#formDesigner").parent().prepend("<div class='ajaxloading ajaxloading5'>Loading Form Designer ...</div>");
     
-    processAJAXPostQuery(_service("datacontrolsEditor", "formPreview", "raw")+"&dchash="+dcHash+"&dcmode="+dcMode, 
-            "fields="+encodeURIComponent(JSON.stringify(formFields)),function(data) {
-        $("#formDesigner").html(data);
+    //"fields="+encodeURIComponent(JSON.stringify(formFields))
+    //processAJAXPostQuery(_service("datacontrolsEditor", "formPreview", "raw")+"&dchash="+dcHash+"&dcmode="+dcMode, 
+    //        "",function(data) {
+    $("#formDesigner").load(_service("datacontrolsEditor", "formPreview", "raw")+"&dchash="+dcHash+"&dcmode="+dcMode, function() {
+        rerenderFormPreview();
+        $("#formDesigner").parent().find(".ajaxloading").detach();
     });
 }
 function rerenderFormPreview() {
+    $("#formDesigner .formbox fieldset").html("");
     $.each(formFields, function(key, fld) {
         renderFieldPreview(key,fld);
     });
@@ -226,6 +276,82 @@ function renderFieldPreview(fieldkey, fieldData) {
         } else if($("#formDesigner fieldset").length>0) {
             $("#formDesigner fieldset").append(data);
         }
+        
+        $(".formbox .field-container").each(function() {
+            if($(this).find(".field-tools").length<=0) {
+                $(this).prepend("<div class='field-tools pull-right'>"+
+                        "<i class='fa fa-gear' data-cmd='editField'></i>"+
+                        "<i class='fa fa-times' data-cmd='removeField'></i>"+
+                        "</div>");
+            }
+            
+            nm = $(this).find("select[name],input[name],textarea[name]").attr("name");
+            $(this).data("column",nm);
+        });
     });
+}
+
+function doFormFieldAction(src) {
+    cmd = $(src).data("cmd");
+    
+    switch(cmd) {
+        case "removeField":
+            $(src).closest(".field-container").detach();
+            break;
+        case "editField":
+            break;
+        default:
+            console.log("Field action missing",cmd);
+    }
+}
+
+function updateFormFieldModel() {
+    if(formFields==null) formFields = {};
+    formKeys = Object.keys(formFields);
+}
+
+function addFormElement(colEle, source) {
+    if(colEle!=null) {
+        console.log(colEle, "FORMELMENT");
+    }
+}
+
+function addColumnField(colEle, source) {
+    if(colEle!=null) {
+        colKey = $(colEle).data("colkey");
+        colType = $(colEle).data("type");//.split("(")[0]
+        colNull = $(colEle).data("null");
+        colKey = $(colEle).data("colkey");
+
+        newField = {
+                "label": toTitle($(colEle).data("column")),
+                "group": "Info",
+                "required": false,
+                "type": "text",
+            };
+        if(colNull=="NO") {
+            newField.required = true;
+        }
+
+        switch(colType.toLowerCase().split("(")[0]) {
+            case "int":case "float":case "double":
+                newField.type = "number";
+                break;
+            case "datetime":
+                newField.type = "datetime";
+                break;
+            case "date":
+                newField.type = "date";
+                break;
+            case "time":
+                newField.type = "time";
+                break;
+            case "text":case "longtext":case "shorttext":
+                newField.type = "textarea";
+                break;
+        }
+        
+        renderFieldPreview(colKey, newField);
+    }
 }
 </script>

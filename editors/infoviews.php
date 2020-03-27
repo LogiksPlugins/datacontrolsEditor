@@ -20,6 +20,25 @@ function pageSidebar() {
 
 function pageContentArea() {
     return "
+    <div class='col-xs-12 col-sm-3 col-md-3 col-lg-2 sidebarSpace'>
+        <ul class='nav nav-tabs nav-justified'>
+            <li class='active'><a href='#tabList' data-toggle='tab' role='tab' aria-controls='nav-tabList' aria-selected='true'>Tabs
+                <button title='Create New Tab' onclick='createNewTab(this)' class='btn btn-default pull-right' style='margin-top: -4px;margin-right: -7px;'><i class='fa fa-plus'></i></button>
+            </a></li>
+        </ul>
+        <div class='tab-content'>
+            <div id='tabList' class='tab-pane fade in active'>
+                <div id='tableTree' class='componentTree list-group list-group-root'>
+                  
+              </div>
+            </div>
+            <div id='dbFormElements' class='tab-pane fade'>
+                <div id='formElementTree' class='componentTree list-group list-group-root'>
+                  
+              </div>
+            </div>
+        </div>
+    </div>
     <div class='col-xs-12 col-sm-9 col-md-9 col-lg-10 bodySpace'>
         <h5>&nbsp;&nbsp;Infoview Editor : <span id='dcTitle'></span> <div id='dcTags' class='pull-right' style='margin-right:10px;'></div></h5>
         <ul class='nav nav-tabs nav-justified'>
@@ -33,9 +52,9 @@ function pageContentArea() {
         </ul>
         <div class='tab-content'>
             <div id='editorTabs' class='table-responsive tab-pane fade'>TAB DETAILS
-                <table class='table table-responsive table-hover'>
-                    <tbody></tbody>
-                </table>
+                <div id='infoviewDesigner' class='formDesigner'>
+                    <h3 align=center>Loading Infoview Preview ...</h3>
+                </div>
             </div>
             <div id='editorTabsAttributes' class='table-responsive tab-pane fade'>TAB ATTRIBUTES
                 <table class='table table-responsive table-hover'>
@@ -53,23 +72,6 @@ function pageContentArea() {
             </div>
             <div id='editorProperties' class='table-responsive tab-pane fade in active'>
                 editorProperties
-            </div>
-        </div>
-    </div>
-    <div class='col-xs-12 col-sm-3 col-md-3 col-lg-2 sidebarSpace'>
-        <ul class='nav nav-tabs nav-justified'>
-            <li class='active'><a href='#tabList' data-toggle='tab' role='tab' aria-controls='nav-tabList' aria-selected='true'>Tabs</a></li>
-        </ul>
-        <div class='tab-content'>
-            <div id='tabList' class='tab-pane fade in active'>
-                <div id='tableTree' class='componentTree list-group list-group-root'>
-                  
-              </div>
-            </div>
-            <div id='dbFormElements' class='tab-pane fade'>
-                <div id='formElementTree' class='componentTree list-group list-group-root'>
-                  
-              </div>
             </div>
         </div>
     </div>
@@ -147,5 +149,9 @@ function updateDCPanelUI() {
     console.log(dcConfig);
     $("#dcTitle").html(dcConfig.title);
     $("#dcTags").html("<label class='label label-success'>"+dcConfig.category+"</label>");
+}
+
+function createNewTab() {
+    
 }
 </script>

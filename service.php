@@ -21,65 +21,123 @@ function _service_listTables() {
 function _service_listColumns() {
     if(!_db()) return [];
     if(!isset($_GET['tbl']) || strlen($_GET['tbl'])<=0) return [];
+    if(!isset($_GET['showHidden'])) $_GET['showHidden'] = "true";
     
-    $cols = _db()->get_columnList($_GET['tbl'],false);
+    $_GET['tbl'] = explode(",",$_GET['tbl']);
     
-    if(isset($cols['id'])) unset($cols['id']);
-    if(isset($cols['created_by'])) unset($cols['created_by']);
-    if(isset($cols['created_on'])) unset($cols['created_on']);
-    if(isset($cols['edited_by'])) unset($cols['edited_by']);
-    if(isset($cols['edited_on'])) unset($cols['edited_on']);
+    if(count($_GET['tbl'])>1) {
+        $showtblname = true;
+    } else {
+        $showtblname = false;
+    }
     
     $finalCols = [];
-    foreach($cols as $k=>$v) {
-        if(in_array($k, $_ENV['NOSHOW_COLUMNS'])) continue;
+    foreach($_GET['tbl'] as $tbl) {
+        $cols = _db()->get_columnList($tbl,false);
+    
+        if($_GET['showHidden']!="false") {
+            if(isset($cols['id'])) unset($cols['id']);
+            if(isset($cols['created_by'])) unset($cols['created_by']);
+            if(isset($cols['created_on'])) unset($cols['created_on']);
+            if(isset($cols['edited_by'])) unset($cols['edited_by']);
+            if(isset($cols['edited_on'])) unset($cols['edited_on']);
+        }
         
-        $finalCols[$k] = [
-                "name"=>$v[0],
-                "type"=>$v[1],
-                "null"=>$v[2],
-                "key"=>$v[3],
-                "default"=>$v[4],
-                "extras"=>$v[5],
-            ];
+        foreach($cols as $k=>$v) {
+            if(in_array($k, $_ENV['NOSHOW_COLUMNS'])) continue;
+            
+            if($showtblname) {
+                $tblColName = "{$tbl}.{$v[0]}";
+            } else {
+                $tblColName = $v[0];
+            }
+            
+            $finalCols[$tblColName] = [
+                    "colkey"=>"{$tbl}.{$v[0]}",
+                    "table"=>$tbl,
+                    "name"=>$tblColName,
+                    "type"=>$v[1],
+                    "null"=>$v[2],
+                    "key"=>$v[3],
+                    "default"=>$v[4],
+                    "extras"=>$v[5],
+                ];
+        }
     }
     
     return $finalCols;
 }
 
+function _service_datalistGroupidList() {
+    $listData = _db()->_selectQ("do_lists","groupid,count(*) as max",["blocked"=>"false"])->_groupBy("groupid")->_GET();
+    
+    $fData = [];
+    
+    foreach($listData as $row) {
+        $fData[$row['groupid']." ({$row['max']})"] = $row['groupid'];
+    }
+    
+    return $fData;
+}
+
 function _service_listFormulas() {
-    return [
-            ["formula"=>"", "name"=>"CUSTOM",],
-            ["formula"=>"sum(@col1)", "name"=>"SUM",],
-            ["formula"=>"count(@col1)", "name"=>"COUNT",],
-            ["formula"=>"max(@col1)", "name"=>"MAX",],
-            ["formula"=>"min(@col1)", "name"=>"MIN",],
-            ["formula"=>"abs(@col1)", "name"=>"ABS",],
-            ["formula"=>"round(@col1)", "name"=>"ROUND",],
-            ["formula"=>"ceil(@col1)", "name"=>"CEIL",],
-            ["formula"=>"floor(@col1)", "name"=>"FLOOR",],
-            ["formula"=>"sin(@col1)", "name"=>"SIN",],
-            ["formula"=>"cos(@col1)", "name"=>"COS",],
-            ["formula"=>"tan(@col1)", "name"=>"TAN",],
-            ["formula"=>"asin(@col1)", "name"=>"ASIN",],
-            ["formula"=>"acos(@col1)", "name"=>"ACOS",],
-            ["formula"=>"atan(@col1)", "name"=>"ATAN",],
-        ];
+    $jsonData = file_get_contents(__DIR__."/data/formulas.json");
+    $jsonData = json_decode($jsonData, true);
+    if($jsonData==null) $jsonData = [];
+    return $jsonData;
 }
 
 function _service_listFormElements() {
-    return [
-            ["name"=>"Static Field", "element"=>"static-field"],
-            ["name"=>"Header Row", "element"=>"row-header"],
-            ["name"=>"Blank Row", "element"=>"row-blank"],
-            ["name"=>"HBar", "element"=>"row-hbar"],
-        ];
+    $jsonData = file_get_contents(__DIR__."/data/formfields.json");
+    $jsonData = json_decode($jsonData, true);
+    if($jsonData==null) $jsonData = [];
+    return $jsonData;
 }
 
 function _service_listDesignBlock() {
-    return [
-            ["name"=>"Custom Block", "element"=>"block-custom"],
-        ];
+    $jsonData = file_get_contents(__DIR__."/data/designBlocks.json");
+    $jsonData = json_decode($jsonData, true);
+    if($jsonData==null) $jsonData = [];
+    return $jsonData;
+}
+
+function _service_previewlink() {
+    if(!isset($_GET['dchash'])) return ["status"=>"error", "msg"=>"Hash Not Defined"];
+    
+    $dcHash = $_GET['dchash'];
+    
+    if(!isset($_SESSION['DCEDITOR'][$dcHash])) return ["status"=>"error", "msg"=>"Configuration Not Found, Try reloading"];
+    
+    $dcParams = $_SESSION['DCEDITOR'][$dcHash];
+    
+    $link = false;
+    switch($dcParams['TYPE']) {
+        case "reports":
+            $link = substr($dcParams['SRCPATH'],strpos($dcParams['SRCPATH'],"reports/")+8);
+            $link = str_replace(".json","",str_replace("/",".",$link));
+            $link = "modules/reports/{$link}";
+            break;
+        case "forms":
+            $link = substr($dcParams['SRCPATH'],strpos($dcParams['SRCPATH'],"forms/")+6);
+            $link = str_replace(".json","",str_replace("/",".",$link));
+            $link = "modules/forms/{$link}/new";
+            break;
+        case "infoview":case "infoviews":
+            $link = substr($dcParams['SRCPATH'],strpos($dcParams['SRCPATH'],"forms/")+6);
+            $link = str_replace(".json","",str_replace("/",".",$link));
+            $link = "modules/infoviews/{$link}";
+            break;
+    }
+    if($link) {
+        $link = _link($link,false,CMS_SITENAME);
+        
+        return [
+                "status"=>"success",
+                "link"=>$link,
+            ];
+    } else {
+        return ["status"=>"error", "msg"=>"Preview link not supported"];
+    }
 }
 
 function _service_fetch() {
@@ -209,6 +267,15 @@ function _service_save() {
             }
         }
         
+        $dcContent = [];
+        if(file_exists($dcFile)) {
+            $dcContent = json_decode(file_get_contents($dcFile), true);
+            
+            if($dcContent==null) $dcContent = [];
+        }
+        
+        $qData = array_merge($dcContent, $qData);
+        
         $a = file_put_contents($dcFile, json_encode($qData,JSON_PRETTY_PRINT));
     }
     
@@ -228,12 +295,12 @@ function _service_generate() {
 }
 
 function _service_formPreview() {
-    if(!isset($_POST['fields'])) return "ERROR";
+    // if(!isset($_POST['fields'])) return "ERROR";
     
-    $fieldsData = json_decode($_POST['fields'], true);
-    if($fieldsData==null) {
-        return "Error, JSON Encoding Failed";
-    }
+    // $fieldsData = json_decode($_POST['fields'], true);
+    // if($fieldsData==null) {
+    //     return "Error, JSON Encoding Failed";
+    // }
     
     formPreviewAddons();
     
@@ -243,7 +310,7 @@ function _service_formPreview() {
             "disable_simpleform"=>true,
             "template"=>"simple",
             //"source"=>[],
-            "fields"=>$fieldsData
+            "fields"=>[]
         ]);
     
     //printArray([$fieldsData,$dcParams,$dcFile]);exit();

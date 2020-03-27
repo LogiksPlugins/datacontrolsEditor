@@ -1,7 +1,20 @@
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
 *[contenteditable] {
     background: #F9F9F9;
     font-size: 14px;
     line-height: 26px;
+}
+.pageComp {
+    overflow: hidden;
 }
 .bodySpace {
     padding: 0px;
@@ -75,4 +88,23 @@ td.nopaddingBox input[type=checkbox] {
 
 .codeReviewPanel .modal-body {
     padding: 5px !important;
+}
+
+.ui-draggable-dragging {
+    /*background:red;*/
+    background: rgba(200,200,200,0.5);
+    width: 300px;
+}
+
+.list-group-group {
+    border-bottom: 1px solid #CCC;
+}
+.list-group-group h5 {
+    padding-left:5px;
+    padding-right: 7px;
+    cursor: pointer;
+}
+
+.clr_RED {
+    color: red !important;
 }

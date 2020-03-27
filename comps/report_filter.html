@@ -1,0 +1,307 @@
+<div id='filterModal' class='modal fade' role='dialog'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+        <h4 class='modal-title'>Filter Configuration</h4>
+      </div>
+      <div class='modal-body'>
+        <form class='form-horizontal' onsubmit='updateFilter(this);return false;'>
+          <div class='form-group'>
+            <label class='control-label col-sm-4'>Type:</label>
+            <div class='col-sm-8'>
+                <select class='form-control' name='filter_type'>
+                    <option value=''>Input Field</option>
+                    <option value='select'>select</option>
+                    <option value='dataSelector'>dataSelector</option>
+                    <option value='dataSelectorFromUniques'>dataSelectorFromUniques</option>
+                    <option value='dataSelectorFromTable'>dataSelectorFromTable</option>
+                    <option value='dataMethod'>dataMethod</option>
+                    <!--<option value='selectAJAX'>selectAJAX</option>-->
+                    <option value='text'>text</option>
+                    <option value='date'>date</option>
+                    <option value='daterange'>daterange</option>
+                    <option value='period'>period</option>
+                    <option value='checkbox'>checkbox</option>
+                </select>
+            </div>
+          </div>
+          <div class='form-group'>
+            <label class='control-label col-sm-4'>Default Value:</label>
+            <div class='col-sm-8'>
+              <input type='text' class='form-control' name='filter_value' data-name='value' placeholder='Default value for filter'>
+            </div>
+          </div>
+          <div class='form-group-elements'>
+            
+          </div>
+        </form>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-danger pull-left' data-dismiss='modal'>Cancel</button>
+        <button type='button' class='btn btn-success' onclick='updateFilter(this)'>Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var referenceColumn = null;
+var oldFilterConfig = {};
+$(function() {
+    $("#filterModal select[name=filter_type]").change(function() {
+        updateModalOnFilterType();
+    });
+});
+
+function editReportFilter(src) {
+    referenceColumn = $(src).closest("td");
+    
+    filterConfig = referenceColumn.data("filter");
+    if(filterConfig==null) {
+        filterConfig = {};
+    //     filterConfig = {
+    //         "type":"select",
+	   //     "nofilter":"--",
+	   //     "options":{}
+    //     };
+    }
+    oldFilterConfig = filterConfig;
+    
+    //console.log(src,filterConfig);
+    
+    $("#filterModal form")[0].reset();
+    $(".form-group-elements","#filterModal").html("");
+    
+    if(filterConfig.type!=null) {
+        $("*[name=filter_type]","#filterModal").val(filterConfig.type);
+        updateModalOnFilterType(function() {
+            updateFilterForm();
+        });
+    }
+    
+    $("#filterModal").modal("show");
+}
+
+function updateFilterForm() {
+    $.each(oldFilterConfig, function(k,v) {
+        if(k=="type") return;
+        if(typeof v == "object") {
+            v = JSON.stringify(v, null, 4);
+        }
+        if($("*[data-name='"+k+"']","#filterModal form").length>0) {
+            $("*[data-name='"+k+"']","#filterModal form").data("value",v);
+            $("*[data-name='"+k+"']","#filterModal form").val(v);
+        }
+    });
+    if($("*[data-name='table']","#filterModal form").length>0) {
+        setTimeout(function() {
+            updateColumnList($("*[data-name='table']","#filterModal form")[0]);
+        }, 500);
+    }
+}
+
+function updateModalOnFilterType(callback) {
+    ftype = $("#filterModal select[name=filter_type]").val();
+    $(".form-group-elements","#filterModal").html("");
+    
+    switch(ftype) {
+        case 'dataMethod':
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input type='text' class='form-control' name='filter_nofilter' data-name='nofilter' placeholder='Text displayed when nothing is selected'>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Method:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input class='form-control' name='method' data-name='method' placeholder='PHP Function/Method' />"+
+                "</div>"+
+              "</div>");
+            return;
+            break;
+        case 'dataSelector':
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input type='text' class='form-control' name='filter_nofilter' data-name='nofilter' placeholder='Text displayed when nothing is selected'>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>GroupID:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control' name='groupid' data-name='groupid' /></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Order By:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control' name='orderBy' data-name='orderBy' ><option value='sortorder'>sortorder</option><option value='title'>title</option><option value='class'>class</option></select>"+
+                "</div>"+
+              "</div>");
+            $("select[name=groupid]","#filterModal").load(_service("datacontrolsEditor", "datalistGroupidList", "select"), function() {
+                if(typeof callback == "function") callback();
+            });
+            return;
+            break;
+        case 'dataSelectorFromUniques': 
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input type='text' class='form-control' name='filter_nofilter' data-name='nofilter' placeholder='Text displayed when nothing is selected'>"+
+                "</div>"+
+              "</div>");
+            
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Table:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control' name='table' data-name='table' onchange='updateColumnList(this)'></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Column 1:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control table-columns' name='col1' data-name='col1' /></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Column 2:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control table-columns' name='col2' data-name='col2' /></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Where:</label>"+
+                "<div class='col-sm-8'>"+
+                  //"<input class='form-control' name='where' data-name='where' placeholder='SQL RAW Where' />"+
+                  "<textarea class='form-control' name='filter_where' data-name='where' placeholder='SQL RAW Where'></textarea>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Order By:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control table-columns' name='orderBy' data-name='orderBy' /></select>"+
+                "</div>"+
+              "</div>");
+            
+            $("select[name=table]","#filterModal").load(_service("datacontrolsEditor", "listTables", "select"), function() {
+                updateColumnList(this);
+                if(typeof callback == "function") callback();
+            });
+            return;
+            break;
+        case 'dataSelectorFromTable':
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input type='text' class='form-control' name='filter_nofilter' data-name='nofilter' placeholder='Text displayed when nothing is selected'>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Table:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control' name='table' data-name='table' onchange='updateColumnList(this)' ></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Columns:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input class='form-control' name='columns' data-name='columns' placeholder='Columns as title, category, value' />"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Where:</label>"+
+                "<div class='col-sm-8'>"+
+                  //"<input class='form-control' name='where' data-name='where' placeholder='SQL RAW Where' />"+
+                  "<textarea class='form-control' name='filter_where' data-name='where' placeholder='SQL RAW Where'></textarea>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Group By:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control table-columns' name='groupBy' data-name='groupBy' /></select>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>Order By:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<select class='form-control table-columns' name='orderBy' data-name='orderBy' /></select>"+
+                "</div>"+
+              "</div>");
+            
+            $("select[name=table]","#filterModal").load(_service("datacontrolsEditor", "listTables", "select"), function() {
+                updateColumnList(this);
+                if(typeof callback == "function") callback();
+            });
+            return;
+            break;
+        case 'select': 
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<input type='text' class='form-control' name='filter_nofilter' data-name='nofilter' placeholder='Text displayed when nothing is selected'>"+
+                "</div>"+
+              "</div>");
+            $(".form-group-elements","#filterModal").append("<div class='form-group'>"+
+                "<label class='control-label col-sm-4'>No Filter Text:</label>"+
+                "<div class='col-sm-8'>"+
+                  "<textarea class='form-control' name='filter_options' data-name='options' placeholder='Type one option per line\nYou can also use value:title'></textarea>"+
+                "</div>"+
+              "</div>");
+            if(typeof callback == "function") callback();
+            return;
+            break;
+        case 'selectAJAX':
+            break;
+        case 'text':
+            break;
+        case 'date':
+            break;
+        case 'daterange':
+            break;
+        case 'period':
+            break;
+        case 'checkbox':
+            break;
+    }
+    if(typeof callback == "function") callback();
+}
+
+function updateFilter(src) {
+    finalFilter = {};
+    finalFilter.type = $("#filterModal select[name=filter_type]").val();
+    
+    if(finalFilter.type.length<=0) {
+        referenceColumn.removeData("filter");
+        referenceColumn.find(".clr_RED").removeClass("clr_RED");
+    } else {
+        $("*[data-name]","#filterModal form").each(function() {
+            nm = $(this).data("name");
+            v = $(this).val();
+            if(v==null) return;
+
+            if(nm=="where") {
+                v = v.trim();
+                if(v.substr(0,1)=="{" && v.substr(v.length-1)=="}") {
+                    v = JSON.stringify(JSON.parse(v))
+                }
+            }
+
+            finalFilter[nm] = v.replace(/\\n/gm,'');
+        });
+        //console.log(finalFilter,referenceColumn);
+        referenceColumn.data("filter",finalFilter);
+        if(referenceColumn.find(".clr_RED").length<=0) {
+            referenceColumn.find(".fa").addClass("clr_RED");
+        }
+    }
+    
+    $("#filterModal").modal("hide");
+}
+
+function updateColumnList(src) {
+    $(src).closest("form").find("select.table-columns").load(_service("datacontrolsEditor", "listColumns", "select")+"&tbl="+$(src).val(), function() {
+        $(this).val($(this).data("value"));
+    });
+}
+</script>
