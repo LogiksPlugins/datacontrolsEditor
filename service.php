@@ -14,7 +14,42 @@ handleActionMethodCalls();
 function _service_listTables() {
     if(!_db()) return [];
     
-    $tbls = _db()->get_tableList();
+    /*$tbls = _db()->get_tableList();
+    return $tbls;*/
+    
+    $db=_db()->get_dbObjects();
+
+ 	$db['functions'] = [];
+  	$db['procedures'] = [];
+
+  	foreach ($db['routines'] as $key=>$dat) {
+		if(isset($dat['ROUTINE_TYPE'])) {
+  			if($dat['ROUTINE_TYPE']=="FUNCTION") {
+    			$db['functions'][$key] = $dat;
+    			unset($db['routines'][$key]);
+  			} elseif($dat['ROUTINE_TYPE']=="PROCEDURE") {
+    			$db['procedures'][$key] = $dat;
+    			unset($db['routines'][$key]);
+  			}
+		}
+  	}
+	foreach ($db as $key => $obj) {
+		$db[$key]=array_keys($obj);
+	}
+	foreach ($db['tables'] as $key=>$tbl) {
+		if(in_array($tbl, $db['view'])) unset($db['tables'][$key]);
+		elseif(in_array($tbl, $db['trigger'])) unset($db['tables'][$key]);
+		elseif(in_array($tbl, $db['event'])) unset($db['tables'][$key]);
+		elseif(in_array($tbl, $db['routine'])) unset($db['tables'][$key]);
+	}
+	$db['tables']=array_values($db['tables']);
+    
+    $tbls = [];
+    foreach($db as $a=>$b) {
+        foreach($b as $c=>$d) {
+            $tbls[$a.":".$d] = $d;
+        }
+    }
     
     return $tbls;
 }

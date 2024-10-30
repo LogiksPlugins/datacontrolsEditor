@@ -10,4 +10,10 @@
 }, {
 	"name": "HBar",
 	"element": "row-hbar"
+}, {
+	"name": "Widget",
+	"element": "widget"
+}, {
+	"name": "Component",
+	"element": "module-component"
 }]

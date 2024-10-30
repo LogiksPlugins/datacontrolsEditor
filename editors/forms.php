@@ -3,20 +3,7 @@ if(!defined('ROOT')) exit('No direct script access allowed');
 
 if(!isset($_REQUEST['panel'])) $_REQUEST['panel']="designer";
 
-// printArray([
-//         $srcPath,
-//         $basePath,
-//         $dcHash
-//     ]);
-
 loadModule("pages");
-
-function pageSidebar() {
-    return "<div id='componentTree' class='componentTree list-group list-group-root'>
-        <select class='form-control select'>
-        </select>
-    </div>";
-}
 
 function pageContentArea() {
     return "
@@ -122,6 +109,9 @@ printPageComponent(false,[
   ]);
 ?>
 <style>
+.formDesigner {
+    padding: 10px;
+}
 .form-actions {
     display:none;
 }
@@ -353,5 +343,8 @@ function addColumnField(colEle, source) {
         
         renderFieldPreview(colKey, newField);
     }
+}
+
+function initFormUI() {
 }
 </script>
